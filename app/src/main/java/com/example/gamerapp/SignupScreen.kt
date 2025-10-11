@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -26,11 +25,17 @@ import kotlinx.coroutines.launch
 fun SignUpScreen(navController: NavController) {
     SignUpContent(
         onSignup = { fullName, email, password, confirmPassword ->
-            if (password == confirmPassword) {
-                navController.navigate("home")
+            if (fullName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword) {
+                navController.navigate("login") {
+                    popUpTo("signup") { inclusive = true }
+                }
             }
         },
-        onLogin = { navController.navigate("login") }
+        onLogin = {
+            navController.navigate("main") {
+                popUpTo("signup") { inclusive = true }
+            }
+        }
     )
 }
 
@@ -57,7 +62,6 @@ fun SignUpContent(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ✅ Logo
             Image(
                 painter = painterResource(id = R.drawable.logo_gamer),
                 contentDescription = "Gamer Logo",
@@ -66,77 +70,56 @@ fun SignUpContent(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Full Name
             OutlinedTextField(
                 value = fullName,
                 onValueChange = { fullName = it },
                 label = { Text("Full Name") },
                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
-                isError = fullName.isEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
-            if (fullName.isEmpty()) {
-                Text("Must not be empty!", color = Color.Red, fontSize = 12.sp)
-            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Email
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-                isError = email.isEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
-            if (email.isEmpty()) {
-                Text("Must not be empty!", color = Color.Red, fontSize = 12.sp)
-            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Password
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 visualTransformation = PasswordVisualTransformation(),
-                isError = password.isEmpty(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
-            if (password.isEmpty()) {
-                Text("Must not be empty!", color = Color.Red, fontSize = 12.sp)
-            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Confirm Password
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 label = { Text("Confirm Password") },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 visualTransformation = PasswordVisualTransformation(),
-                isError = confirmPassword.isEmpty() || confirmPassword != password,
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp)
             )
-            if (confirmPassword.isEmpty() || confirmPassword != password) {
-                Text("Passwords must match!", color = Color.Red, fontSize = 12.sp)
-            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ✅ Sign Up Button
             Button(
                 onClick = {
                     if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -162,57 +145,6 @@ fun SignUpContent(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text("OR", color = Color.Red)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // ✅ Social Buttons
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                // Facebook
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Facebook signup coming soon!")
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.facebook_btn),
-                        contentDescription = "Facebook",
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Facebook", color = Color.Black)
-                }
-
-                // Google
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Google signup coming soon!")
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.google_btn),
-                        contentDescription = "Google",
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Google", color = Color.Black)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // ✅ Already have an account
             Text(
                 text = "Already have an account? Sign In",
                 modifier = Modifier.clickable { onLogin() },
@@ -221,10 +153,4 @@ fun SignUpContent(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpPreview() {
-    SignUpContent()
 }
