@@ -73,12 +73,14 @@ fun LoginScreen(navController: NavController) {
             // Bouton Login
             Button(
                 onClick = {
-                    if (email.isEmpty() || password.isEmpty()) {
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        navController.navigate("main") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    } else {
                         coroutineScope.launch {
                             snackbarHostState.showSnackbar("Please fill all fields")
                         }
-                    } else {
-                        println("Login attempt with: $email")
                     }
                 },
                 modifier = Modifier
@@ -89,6 +91,7 @@ fun LoginScreen(navController: NavController) {
             ) {
                 Text("Login", color = Color.White, fontSize = 18.sp)
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -124,7 +127,7 @@ fun LoginScreen(navController: NavController) {
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.facebook_btn),
+                        painter = painterResource(id = R.drawable.ic_facebook),
                         contentDescription = "Facebook",
                         modifier = Modifier.size(20.dp)
                     )
@@ -143,7 +146,7 @@ fun LoginScreen(navController: NavController) {
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.google_btn),
+                        painter = painterResource(id = R.drawable.ic_google),
                         contentDescription = "Google",
                         modifier = Modifier.size(20.dp)
                     )

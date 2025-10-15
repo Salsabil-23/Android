@@ -32,7 +32,7 @@ fun SignUpScreen(navController: NavController) {
             }
         },
         onLogin = {
-            navController.navigate("main") {
+            navController.navigate("login") {
                 popUpTo("signup") { inclusive = true }
             }
         }

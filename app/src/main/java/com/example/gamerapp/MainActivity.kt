@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.gamerapp.ForgotPasswordScreen
+import com.example.gamerapp.OTPValidationScreen
+import com.example.gamerapp.ResetPasswordScreen
 import com.example.gamerapp.ui.theme.GamerAppTheme
-import com.example.gamerapp.ui.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +38,9 @@ class MainActivity : ComponentActivity() {
 fun GamerApp() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "splash") {
-        composable("splash") { SplashScreen(navController) }
-        composable("main") { MainScreen(navController) } // MainScreen contient BottomBar
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") { LoginScreen(navController) }
+        composable("main") { MainScreen() } // MainScreen avec NewsScreen par défaut
         composable("signup") { SignUpScreen(navController) }
         composable("forgot_password") { ForgotPasswordScreen(navController) }
         composable("otp_validation") { OTPValidationScreen(navController) }

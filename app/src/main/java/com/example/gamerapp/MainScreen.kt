@@ -3,24 +3,27 @@ package com.example.gamerapp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
+import com.example.gamerapp.NewsScreen
+import com.example.gamerapp.ProfileScreen
+import com.example.gamerapp.StoreScreen
+
+data class BottomNavItem(val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val route: String)
 
 @Composable
-fun MainScreen(navControllerGlobal: NavController) {
+fun MainScreen() {
     val navController = rememberNavController()
     val items = listOf(
-        BottomNavItem("Login", Icons.Default.AccountCircle, "login"),
-        BottomNavItem("Sign Up", Icons.Default.Add, "signup")
+        BottomNavItem("News", Icons.Default.Info, "news"),
+        BottomNavItem("Store", Icons.Default.ShoppingCart, "store"),
+        BottomNavItem("Profile", Icons.Default.AccountCircle, "profile")
     )
 
     Scaffold(
@@ -28,20 +31,15 @@ fun MainScreen(navControllerGlobal: NavController) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "news", // NewsScreen par défaut
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("login") { LoginScreen(navControllerGlobal) } // Utilise le nav global
-            composable("signup") { SignUpScreen(navControllerGlobal) }
+            composable("news") { NewsScreen() }
+            composable("store") { StoreScreen() }
+            composable("profile") { ProfileScreen() }
         }
     }
 }
-
-data class BottomNavItem(
-    val label: String,
-    val icon: androidx.compose.ui.graphics.vector.ImageVector,
-    val route: String
-)
 
 @Composable
 fun BottomNavBar(navController: NavHostController, items: List<BottomNavItem>) {
